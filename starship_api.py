@@ -24,7 +24,7 @@ client = pymongo.MongoClient()
 db = client['starwars']
 
 
-# This function deletes the starship collection
+# This function deletes the starship collection if already present
 def delete_starship_collection():
     db.starships.drop()
 
@@ -38,4 +38,19 @@ def creating_starship_collection():
 def insert_starships_collection():
     for starship in list_of_ships:
         db.starships.insert_one(starship)
+
+
+# This function is to replace all the pilot urls with the pilot ids
+def update_pilot_info():
+    # Finds starship documents in the collection
+    for ship in db.starship.find({}, {"_id": 1, "name": 1, "pilots": 1}):
+        # If pilots are present then run the loop
+        if ship["pilots"] != []:
+            # List of pilot names for each starship
+            pilot_names = [requests.get(pilot_url).json()["name"] for pilot_url in ship["pilots"]]
+            # Finding id of pilot from their names
+            ids_of_pilot = [next(db.characters.find({"name": name}))["_id"] for name in pilot_names]
+            # Updates collection of pilot urls to ids
+            db.starships.update_one({"_id": ship["_id"]}, {"$set":{"pilots":ids_of_pilot}})
+
 
