@@ -26,8 +26,10 @@ db = client['starwars']
 
 # This function deletes the starship collection if already present
 def delete_starship_collection():
-    db.starships.drop()
-    print("dropped starship collection if already present")
+    # If startships in starwars database then drop
+    if "starships" in db.list_collection_names():
+        db.starships.drop()
+
 
 # This function is used to create a starship collection
 def creating_starship_collection():
@@ -64,4 +66,4 @@ def run_all():
     update_pilot_info()
 
 
-#run_all()
+run_all()
