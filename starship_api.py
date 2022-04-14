@@ -54,3 +54,4 @@ def update_pilot_info():
             db.starships.update_one({"_id": ship["_id"]}, {"$set":{"pilots":ids_of_pilot}})
 
 
+#run
