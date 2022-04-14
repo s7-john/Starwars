@@ -6,7 +6,7 @@ starships_url = "https://swapi.dev/api/starships/"
 list_of_ships = []
 
 #This functiom is to dynamically go through the pages of starships using a while loop.
-def url_results():
+def url_api():
     page = starships_url
     while page:
         json_return = requests.get(page).json()
@@ -27,18 +27,18 @@ db = client['starwars']
 # This function deletes the starship collection if already present
 def delete_starship_collection():
     db.starships.drop()
-
+    print("dropped starship collection if already present")
 
 # This function is used to create a starship collection
 def creating_starship_collection():
     db.create_collection("Starships")
+    print("created new starship collection")
 
-
-# This function is to insert starships collection to the starwars database
+# This function is to insert starships collection data
 def insert_starships_collection():
     for starship in list_of_ships:
         db.starships.insert_one(starship)
-
+        print("inserted ship data")
 
 # This function is to replace all the pilot urls with the pilot ids
 def update_pilot_info():
@@ -56,4 +56,12 @@ def update_pilot_info():
 
 
 
-#run1
+def run_all():
+    url_api()
+    delete_starship_collection()
+    creating_starship_collection()
+    insert_starships_collection()
+    update_pilot_info()
+
+
+#run_all()
